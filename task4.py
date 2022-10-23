@@ -14,16 +14,31 @@ def Check_number(N):
 
 
 def Find_divigers(N):
+    main = N
     divigers = []
-    for i in range(2, N//2):
+    for i in range(2, N//2 + 1 ):
         while (N % i == 0):
             if  Check_number(i) and N % i == 0:
                 divigers.append(i)
                 N /= i
-    print(divigers)
+    print(f'1 способ: Простые множители числа N = {main} - {divigers}')
 
-num = 22
-Find_divigers(num)
+Find_divigers(22)
+
+def Easy_find_divigers(N):
+    main = N
+    i = 2 
+    list = []
+    while i <= N:
+        if N % i == 0:
+            list.append(i)
+            N //= i
+            i = 2
+        else:
+            i += 1
+    print(f'2 способ: Простые множители числа N = {main} - {list}')
+
+Easy_find_divigers(22)
 
 # Задача 2. В первой строке файла находится информация об ассортименте мороженного, во второй - информация о том, какое мороженное есть на складе. Выведите названия того товара, который закончился.
 # 1. «Сливочное», «Бурёнка», «Вафелька», «Сладкоежка»
@@ -37,8 +52,9 @@ def Defic_ice_cream():
     data.close()
     first_str = set(icecream[0].replace('\n', '').split(', '))
     second_str = set(icecream[1].replace('\n', '').split(', '))
-
-    print(f'Закончилось : {first_str.difference(second_str)}')
+    print(f'Ассортимент: {first_str}')
+    print(f'На складе: {second_str}')
+    print(f'Закончилось: {first_str.difference(second_str)}')
 
 Defic_ice_cream()
 
