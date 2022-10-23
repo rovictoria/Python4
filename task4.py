@@ -60,6 +60,7 @@ Defic_ice_cream()
 
 # Задача 3. Выведите число π с заданной точностью. Точность вводится пользователем в виде натурального числа. 3 -> 3.142
 # 5 -> 3.14159
+print('3. Вывод числа π с заданной точностью.')
 
 def Pi_number():
     N = int(input('Введите количество знаков после запятой для пи: '))
@@ -69,29 +70,48 @@ Pi_number()
 
 # Задача 4*. Даны два файла, в каждом из которых находится запись многочлена. Найдите сумму данных многочленов.
 # 1. 5x^2 + 3x 2. 3x^2 + x + 8 Результат: 8x^2 + 4x + 8
+print('4. Сумма многочленов.')
 
-# n = '5x^2 + 3x 2'
-# n.replace('-', '+-')
-# print(n)
-# n = n.split('+')
-# print(n)
+with open('polyn1.txt', 'w', encoding='utf-8') as file1:
+    n = '5x^2 + 3x - 4 = 0'
+    file1.write(n)
+with open('polyn2.txt', 'w', encoding='utf-8') as file2:
+    n = '3x^2 - x + 8 = 0'
+    file2.write(n)
 
-with open('polyndrom1.txt', 'w', encoding='utf-8') as file:
-    file.write('5x^2 + 3x')
-with open('polyndrom2.txt', 'w', encoding='utf-8') as file:
-    file.write('3x^2 + x + 8')
+with open('polyn1.txt', 'r') as file1:
+   polyn1 = file1.readline()
+with open('polyn2.txt', 'r') as file2:
+   polyn2 = file2.readline()
 
-with open('polyndrom1.txt','r') as file:
-    polyndrom1 = file.readline()
-    list_of_polyndrom1 = polyndrom1.split()
+print(f'Первый многочлен: {polyn1}')
+print(f'Второй многочлен: {polyn2}')
 
+# если бы без
+# with open('polyn1.txt', 'r') as inf:
+#     polyn1 = [str.replace('-', '+ -').split(" + ") for str in map(str.rstrip, inf.readlines())]
 
-with open('polyndrom2.txt','r') as file:
-    polyndrom2 = file.readline()
-    list_of_polyndrom2 = polyndrom2.split()
+# with open('polyn2.txt', 'r') as inf:
+#     polyn2 = [str.replace('-', '+ -').split(" + ") for str in map(str.rstrip, inf.readlines())]
 
-print(f'{list_of_polyndrom1} + {list_of_polyndrom2}')
-sum_polyndroms = list_of_polyndrom1 + list_of_polyndrom2
+import re #регулярные выражения
+from sympy import Symbol, collect  #позволяет символьно воспринимать, дальше для х; collect уже для суммы
+# установлено отдельно py -m pip install sympy
 
-with open('sum_polyndroms.txt', 'w', encoding='utf-8') as file:
-    file.write(f'{list_of_polyndrom1} + {list_of_polyndrom2}')
+def Convert_for_Python(pol):
+    pol = re.sub(r'(\d)(x)', r'\1*\2', pol)
+    pol = pol.replace('^', '**')
+    # pol = pol.replace('-','+ -') тогда в подобной корректировке и нет смысла
+    pol = pol[:-4:]
+    return pol
+
+polyn1 = Convert_for_Python(polyn1)
+polyn2 = Convert_for_Python(polyn2)
+
+x = Symbol('x')
+
+result = str(collect(polyn1 + ' + ' + polyn2, x))
+result = result.replace('**', '^')
+result = result.replace('*', '')
+result = result + ' = 0'
+print(f'Результат суммы многочленов: {result}')
